@@ -1,62 +1,31 @@
-local remap = require('devious-dev.remap')
+local lsp_zero = require('lsp-zero')
+local remap = require('drvondevious.remap')
 
-require('mason').setup()
+lsp_zero.on_attach(function(_, bufnr)
+    lsp_zero.default_keymaps({buffer = bufnr})
+    remap.lsp()
+end)
 
+require('mason').setup({})
 require('mason-lspconfig').setup({
-  ensure_installed = {
-    'lua_ls',
-    'marksman',
-    'bashls',
-    'cssls',
-    'ember',
-    'emmet_ls',
-    'html',
-    'jsonls',
-    'tsserver',
-    'tailwindcss',
-  }
+    ensure_installed = { 'rust_analyzer' },
+    handlers = {
+        lsp_zero.default_setup,
+    },
 })
 
-local on_attach = function(_, _)
-  remap.lsp()
-end
+local lspconfig = require('lspconfig')
 
-require('lspconfig').lua_ls.setup({
-  on_attach = on_attach
+lspconfig.rust_analyzer.setup({
+    root_dir = lspconfig.util.root_pattern('Cargo.toml'),
 })
 
-require('lspconfig').marksman.setup({
-  on_attach = on_attach
-})
+local cmp = require('cmp')
 
-require('lspconfig').bashls.setup({
-  on_attach = on_attach
-})
-
-require('lspconfig').cssls.setup({
-  on_attach = on_attach
-})
-
-require('lspconfig').ember.setup({
-  on_attach = on_attach
-})
-
-require('lspconfig').emmet_ls.setup({
-  on_attach = on_attach
-})
-
-require('lspconfig').html.setup({
-  on_attach = on_attach
-})
-
-require('lspconfig').jsonls.setup({
-  on_attach = on_attach
-})
-
-require('lspconfig').tsserver.setup({
-  on_attach = on_attach
-})
-
-require('lspconfig').tailwindcss.setup({
-  on_attach = on_attach
+cmp.setup({
+    mapping = cmp.mapping.preset.insert({
+        ['<CR>'] = cmp.mapping.confirm({select = false}),
+        ['<C-u>'] = cmp.mapping.scroll_docs(-4),
+        ['<C-d>'] = cmp.mapping.scroll_docs(4),
+    })
 })

@@ -1,7 +1,7 @@
-require('nvim-tree').setup({
-  filters = {
-    dotfiles = true
-  }
+require("nvim-tree").setup({
+    filters = {
+        dotfiles = true
+    }
 })
 
-require('devious-dev.remap').nvim_tree()
+require('drvondevious.remap').nvim_tree()

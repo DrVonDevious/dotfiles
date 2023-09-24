@@ -1,2 +1,2 @@
 require('bufferline').setup()
-require('devious-dev.remap').barbar()
+require('drvondevious.remap').barbar()
